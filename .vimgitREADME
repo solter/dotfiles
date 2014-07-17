@@ -18,6 +18,7 @@ alias vimgit='--git-dir=.vimgit --work-tree=~/'
   !.vimrc
   !.vim
   .vim/view
+  .vim/.netrwhist
   !.vimgitREADME
 
 *restart your bash session (run . .bashrc)
