@@ -1,0 +1,25 @@
+==========
+==vimgit==
+==========
+
+My vim configuration since I would like to use it everywhere.
+The git part is just version controlling it
+
+SETUP
+=========
+
+1) in your home directory (or wherever .vim and .vimrc are located),
+create a bare repo with 'git init --bare .vimgit'
+2) in your .bashrc or .bash_aliases file, add a line:
+alias vimgit='--git-dir=.vimgit --work-tree=~/'
+3) in the .vimgit/info/exclude file add the following lines:
+
+  /*
+  !.vimrc
+  !.vim
+  .vim/view
+  !.vimgitREADME
+
+*restart your bash session (run . .bashrc)
+*in your home directory use vimgit just like you would use git
+(so run vimgit add --all, vimgit commit for an initial commit)
