@@ -3,7 +3,10 @@
 ==========
 
 My vim configuration since I would like to use it everywhere.
-The git part is just version controlling it
+The git part is just version controlling it.
+
+There is also a sedTricks file. Ideally this will grow to contain
+all my config files...
 
 SETUP
 =========
@@ -20,7 +23,17 @@ alias vimgit='--git-dir=.vimgit --work-tree=~/'
   .vim/view
   .vim/.netrwhist
   !.vimgitREADME
+  !sedTricks
 
 *restart your bash session (run . .bashrc)
 *in your home directory use vimgit just like you would use git
 (so run vimgit add --all, vimgit commit for an initial commit)
+
+Contents
+===========
+.vimrc, .vim, .vim/*
+  vim files
+.vimgitREADME
+  a readme file (this)
+sedTricks
+  descriptions of sed commands since they are so obtuse
