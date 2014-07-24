@@ -21,12 +21,6 @@ colorscheme default
 "turn on line numbers
 set number
 
-"move between windows with ctrl-thing rather than ctr-w
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
-
 "Octave Syntax
 augroup filetypedetect
   au! BufRead,BufNewFile *.m,*.oct set filetype=octave
@@ -63,3 +57,7 @@ autocmd VimEnter,Colorscheme *.* :IndentGuidesEnable
 "adjust split sizes to stay porportional when window is resized
 autocmd VimResized *.* set noea "toggles equal width off
 autocmd VimResized *.* set ea "toggles equal width on
+
+"turn on search highlighting - and reset the highlight to null when window refreshed
+set hlsearch
+nnoremap <silent> <C-l> :nohl<CR><C-l>
