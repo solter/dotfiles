@@ -38,7 +38,7 @@ Rather than worry about the repo directory stuff, do the following
 3) update .vimgit/config to include the following section:
   [branch "master"]
     remote = origin
-    merge = refs/head/master
+    merge = refs/heads/master
 4) run vimgit pull
 5) cd into .vimgit/bundle and run the following:
   git clone git://github.com/nathanaelkane/vim-indent-guides.git
