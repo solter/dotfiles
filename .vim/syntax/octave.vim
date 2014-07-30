@@ -606,15 +606,35 @@ syn match octaveLineContinuation  "\.\{3}$"
 syn match octaveLineContinuation  "\\$"
 syn match octaveError  "\.\{3}.\+$"hs=s+3
 syn match octaveError  "\\\s\+$"hs=s+1
-" Line continuations w/comments
-syn match octaveLineContinuation  "\.\{3}\s*[#%]"me=e-1
-syn match octaveLineContinuation  "\\\s*[#%]"me=e-1
 
-" Comments, order of matches is important here
-syn keyword octaveFIXME contained  FIXME TODO
-syn match  octaveComment  "[%#].*$"  contains=octaveFIXME,octaveTab,@Spell
-syn match  octaveError    "[#%][{}]"
-syn region octaveBlockComment  start="^\s*[#%]{\s*$"  end="^\s*[#%]}\s*$" contains=octaveFIXME,octaveTab,@Spell
+" start at the last char in the file and wrap for the
+" first search to find match at start of file
+normal G$
+"if there is a octave style comment using #
+if search("^[^\%,^\"]*#") > 0
+  "implement octave comments
+
+  " Line continuations w/comments
+  syn match octaveLineContinuation  "\.\{3}\s*[#%]"me=e-1
+  syn match octaveLineContinuation  "\\\s*[#%]"me=e-1
+
+  syn keyword octaveFIXME contained  FIXME TODO
+  " Comments, order of matches is important here
+  syn match  octaveComment  "[%#].*$"  contains=octaveFIXME,octaveTab,@Spell
+  syn match  octaveError    "[#%][{}]"
+  syn region octaveBlockComment  start="^\s*[#%]{\s*$"  end="^\s*[#%]}\s*$" contains=octaveFIXME,octaveTab,@Spell
+else
+  "implement Matlab comments
+  "AKA: disallow # as a comment
+  syn match octaveLineContinuation  "\.\{3}\s*[%]"me=e-1
+  syn match octaveLineContinuation  "\\\s*[%]"me=e-1
+
+  syn keyword octaveFIXME contained  FIXME TODO
+  " Comments, order of matches is important here
+  syn match  octaveComment  "[%].*$"  contains=octaveFIXME,octaveTab,@Spell
+  syn match  octaveError    "[%][{}]"
+  syn region octaveBlockComment  start="^\s*[%]{\s*$"  end="^\s*[%]}\s*$" contains=octaveFIXME,octaveTab,@Spell
+endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Apply highlight groups to syntax groups defined above

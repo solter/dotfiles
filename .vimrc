@@ -12,27 +12,12 @@ execute pathogen#infect()
 "Make fortran free form, not fixed
 let fortran_free_source=1
 
-"turn on syntax highlighting
-syntax enable
 "set background=dark
 "let g:solarized_termcolors=256
 colorscheme default
 
 "turn on line numbers
 set number
-
-"Octave Syntax
-augroup filetypedetect
-  au! BufRead,BufNewFile *.m,*.oct set filetype=octave
-augroup END
-
-" Use keywords from Octave syntax language file for autocomplete 
-if has("autocmd") && exists("+omnifunc") 
-   autocmd Filetype octave 
-   \if &omnifunc == "" | 
-   \  setlocal omnifunc=syntaxcomplete#Complete | 
-   \endif 
-endif 
 
 "save folds when closing
 autocmd BufWinLeave *.* mkview
@@ -44,15 +29,21 @@ augroup vimrc
   "au BufWinEnter *^.py if &fdm == 'indent' | setlocal foldmethod=manual | endif
 augroup END
 
-"auto indent guide stuff in python
+"auto indent guide
 "needs indent guides - see github repo at https://github.com/nathanaelkane/vim-indent-guides
 "restrict this to python by replacing *.* with *.py
-autocmd VimEnter,Colorscheme *.* :let g:indent_guides_auto_colors=0
-autocmd VimEnter,Colorscheme *.* :hi IndentGuidesOdd ctermbg=5
-"autocmd VimEnter,Colorscheme *.* :hi IndentGuidesEven ctermbg=0
-autocmd VimEnter,Colorscheme *.* :let g:indent_guides_start_level=3
-autocmd VimEnter,Colorscheme *.* :let g:indent_guides_guide_size=1
-autocmd VimEnter,Colorscheme *.* :IndentGuidesEnable
+function! Setup_IG ()
+  let g:indent_guides_auto_colors=0
+  hi IndentGuidesOdd ctermbg=5
+  "hi IndentGuidesEven ctermbg=0
+  let g:indent_guides_start_level=3
+  let g:indent_guides_guide_size=1
+  IndentGuidesEnable
+endfunction
+
+"turn on syntax highlighting
+syntax enable
+autocmd VimEnter,Colorscheme *.* :call Setup_IG()
 
 "adjust split sizes to stay porportional when window is resized
 autocmd VimResized *.* set noea "toggles equal width off
@@ -61,3 +52,15 @@ autocmd VimResized *.* set ea "toggles equal width on
 "turn on search highlighting - and reset the highlight to null when window refreshed
 set hlsearch
 nnoremap <silent> <C-l> :nohl<CR><C-l>
+
+augroup filetypedetect
+  au! BufNewFile,BufRead *.m :set filetype=octave
+augroup END
+
+" Use keywords from Octave syntax language file for autocomplete 
+if has("autocmd") && exists("+omnifunc") 
+   autocmd Filetype octave 
+   \if &omnifunc == "" | 
+   \  setlocal omnifunc=syntaxcomplete#Complete | 
+   \endif 
+endif 
