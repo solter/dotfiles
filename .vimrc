@@ -73,6 +73,7 @@ nnoremap <silent> <C-l> :nohl<CR><C-l>
 
 augroup filetypedetect
   au! BufNewFile,BufRead *.m :set filetype=octave
+  au! BufNewFile,BufRead *.f90? :set filetype=fortran
 augroup END
 
 " Use keywords from Octave syntax language file for autocomplete 
