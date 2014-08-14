@@ -19,6 +19,24 @@ colorscheme default
 "turn on line numbers
 set number
 
+"open split windows below and to the right rather than above and left
+set splitbelow
+set splitright
+
+"function which opens vim file browser with some different options than standard
+function! OpenFE ()
+  set nosplitright
+  20vsplit .
+  set nonumber
+  set splitright
+endfunction
+
+"map window-d (<C-w><C-d>) to open up directory
+nmap <silent> <C-W><C-D> :call OpenFE()<CR>
+map <C-W>, <C-W><
+map <C-W>. <C-W>>
+
+
 "save folds when closing
 autocmd BufWinLeave *.* mkview
 autocmd BufWinEnter *.* silent loadview
