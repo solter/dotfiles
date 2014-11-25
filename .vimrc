@@ -5,6 +5,7 @@ set tabstop=2
 
 "preserve tabbing from 1 line to the next
 set autoindent
+filetype plugin indent on
 
 "enable pathogen to dig up mods in .vim/bundle
 execute pathogen#infect()
@@ -71,9 +72,16 @@ autocmd VimResized *.* set ea "toggles equal width on
 set hlsearch
 nnoremap <silent> <C-l> :nohl<CR><C-l>
 
+"Deals with makefiles
+function! Setup_Makefiles ()
+  setfiletype make
+  set noexpandtab "use real tabs since makefile is stupid
+endfunction
+
 augroup filetypedetect
-  au! BufNewFile,BufRead *.m :set filetype=octave
-  au! BufNewFile,BufRead *.f90? :set filetype=fortran
+  au! BufNewFile,BufRead *.m setfiletype octave
+  au! BufNewFile,BufRead *.f90? setfiletype fortran
+  au! BufNewFile,BufRead Make* :call Setup_Makefiles()
 augroup END
 
 " Use keywords from Octave syntax language file for autocomplete 
