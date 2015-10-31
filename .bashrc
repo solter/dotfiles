@@ -127,3 +127,6 @@ PATH=$PATH:~/.local/bin/
 
 #allow <C-S> to be used in vim
 stty -ixon
+
+#bash completion
+source /home/solter/.gitcompletion.bash
