@@ -15,7 +15,7 @@ if exists('g:loaded_syntastic_cpp_pc_lint_checker')
 endif
 let g:loaded_syntastic_cpp_pc_lint_checker = 1
 
-runtime! syntax_checkers/c/*.vim
+runtime! syntax/checkers/c/*.vim
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'cpp',

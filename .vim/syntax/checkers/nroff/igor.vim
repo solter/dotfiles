@@ -15,7 +15,7 @@ if exists('g:loaded_syntastic_nroff_igor_checker')
 endif
 let g:loaded_syntastic_nroff_igor_checker = 1
 
-runtime! syntax_checkers/docbk/*.vim
+runtime! syntax/checkers/docbk/*.vim
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'nroff',

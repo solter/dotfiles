@@ -15,7 +15,7 @@ if exists('g:loaded_syntastic_xslt_xmllint_checker')
 endif
 let g:loaded_syntastic_xslt_xmllint_checker = 1
 
-runtime! syntax_checkers/xml/*.vim
+runtime! syntax/checkers/xml/*.vim
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'xslt',

@@ -67,7 +67,7 @@ function! SyntaxCheckers_python_pylama_GetLocList() dict
     return loclist
 endfunction
 
-runtime! syntax_checkers/python/pyflakes.vim
+runtime! syntax/checkers/python/pyflakes.vim
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
     \ 'filetype': 'python',

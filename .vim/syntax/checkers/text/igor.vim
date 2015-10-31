@@ -15,8 +15,6 @@ if exists('g:loaded_syntastic_text_igor_checker')
 endif
 let g:loaded_syntastic_text_igor_checker = 1
 
-echom "trying to:"
-echom "syntax/checkers/docbk/*.vim"
 runtime! syntax/checkers/docbk/*.vim
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
