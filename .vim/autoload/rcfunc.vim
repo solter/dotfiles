@@ -1,13 +1,7 @@
-"auto indent guide
-"needs indent guides - see github repo at https://github.com/nathanaelkane/vim-indent-guides
-"restrict this to python by replacing *.* with *.py
-function! rcfunc#Setup_IG ()
-  let g:indent_guides_auto_colors=0
-  "hi IndentGuidesOdd ctermbg=5
-  hi IndentGuidesEven ctermbg=5
-  let g:indent_guides_start_level=2
-  let g:indent_guides_guide_size=1
-  let g:indent_guides_enable_on_vim_startup=1
+"Refreshes the buffer"
+function! rcfunc#refresh ()
+  nohl  
+  IndentGuidesEnable
 endfunction
 
 "Deals with makefiles
@@ -27,8 +21,39 @@ function! rcfunc#Setup_tags ()
         "add that directory to tags
         let &tags .= rootDirs[0:-5] . ","
       endfor
-      :TlistOpen
-      "TODO: figure out how to open up file explorer
+      "TODO: figure out the appropriate way to set up nerdtree and taglist
+      NERDTree
   endif
   endif
+endfunction
+
+"Closes NERDTree and tagbar if they are all that's open
+function! rcfunc#killIDE ()
+    "Detects which are open
+    if exists('t:NERDTreeBufName')
+        let nerdtree_open = bufwinnr(t:NERDTreeBufName) != -1
+    else
+        let nerdtree_open = 0
+    endif
+    let tagbar_open = bufwinnr('__Tagbar__') != -1
+
+    "if the number of windows is less than tagbar and nerdtree (2)
+    if winnr('$') <= tagbar_open + nerdtree_open
+        quit
+    endif
+endfunction
+
+"This gets the buffer count
+function! rcfunc#bufCount()
+    "The last buffer
+    let i = bufnr('$')
+    let j = 0
+    while i >= 1
+        "if
+        if buflisted(i)
+            let j+=1
+        endif
+        let i-=1
+    endwhile
+    return j
 endfunction

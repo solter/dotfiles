@@ -17,6 +17,8 @@ endif
 
 let colors_name = "peachpuff_custom"
 
+hi Normal NONE 
+"ctermbg=bg ctermfg=fg
 hi SpecialKey term=bold ctermfg=4 guifg=Blue
 hi NonText term=bold cterm=bold ctermfg=4 gui=bold guifg=Blue
 hi Directory term=bold ctermfg=4 guifg=Blue
