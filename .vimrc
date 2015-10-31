@@ -1,4 +1,7 @@
 "++++++++general parameter settings+++++++++
+"Grab plugins
+execute pathogen#infect()
+
 "tab spacing
 set expandtab
 set shiftwidth=4
@@ -65,6 +68,7 @@ set statusline=%<\ %F\ %h%r%{SyntasticStatuslineFlag()}%m%=%-14.(%l,%c%V%)\ %P
 "+++Syntastic settings
 let g:syntastic_stl_format = '[%E{%e Err}%B{ : }%W{%w Warn}]'
 let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_loc_list_height = 3
 "switch to 2 if don't want the errors window popping up automatically
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
@@ -89,24 +93,40 @@ let g:syntastic_shell = "/bin/bash"
 let g:NERDTreeShowBookmarks = 1
 let g:NERDTreeDirArrows=0
 
+"+++Tagbar settings
+nnoremap ,t TagbarTogglePause
+let g:tagbar_width = 30
+let g:tagbar_sort = 0
+let g:tagbar_iconchars = ['+', '-']
+let g:tagbar_autoshowtag = 1
+autocmd FileType * nested :call tagbar#autoopen(0)
+let g:tagbar_status_func = 'rcfunc#TagbarStatusFunc'
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+
 "Opens up NERDTree and tagbar if tags exist
-let &tags="./tags,"
-if !exists("g:ide")
-  let g:ide = 1
-endif
-if g:ide
-  "add root directory containing arch tags if it exists
-  au VimEnter *.* :call rcfunc#Setup_tags()
-endif
+let &tags="./.tags,"
+"add root directory containing arch tags if it exists
+au VimEnter *.* :call rcfunc#Setup_tags()
 
 "When a new window is entered
 autocmd BufEnter __Tagbar__  :call rcfunc#killIDE()
 autocmd BufEnter NERD_tree*  :call rcfunc#killIDE()
 
-"update tag file
-"command description
-"%:p:h - % -> current file, :p -> full path name, :h -> head (exclude file name)
-nnoremap ,t !(cd %:p:h; if [ -e 'tags' ] then; ctags *; fi )&
+"ycm settings
+nnoremap <C-0> :YcmCompleter GoToImprecise<CR>
+nnoremap <leader>yc :YcmCompleter<CR>
+nnoremap <C-0> :YcmCompleter GetDoc<CR>
+let g:ycm_show_diagnostics_ui = 0
+let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_seed_identifiers_with_syntax = 1
+let g:ycm_goto_buffer_command = 'horizontal-split'
+
+"settings for the preview eindow
+let g:completeopt = 'menuone,menu,preview'
+let g:ycm_add_preview_to_completeopt = 1
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_autoclose_preview_window_after_insertion = 1
 
 augroup indent_settings
   "auto-folds with indents
@@ -122,9 +142,6 @@ augroup indent_settings
   let g:indent_guides_enable_on_vim_startup=1
   let g:indent_guides_default_mapping = 0
 augroup END
-
-"adjust split sizes to stay porportional when window is resized
-"autocmd VimResized *.* :call resWin()
 
 "turn on search highlighting - and reset the highlight to null when window refreshed
 set hlsearch

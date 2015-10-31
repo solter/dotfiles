@@ -12,18 +12,13 @@ endfunction
 
 "Sets tag variables and opens up windows
 function! rcfunc#Setup_tags ()
-  if g:ide
   "if it has a tags file
-  if strlen(findfile('tags',"."))
+  if strlen(findfile('.tags',"."))
       "for every directory above that has a .git folder
-      let &tags="./tags,"
       for rootDirs in finddir(".git",".;~solfest/workspace",-1)
         "add that directory to tags
         let &tags .= rootDirs[0:-5] . ","
       endfor
-      "TODO: figure out the appropriate way to set up nerdtree and taglist
-      NERDTree
-  endif
   endif
 endfunction
 
@@ -56,4 +51,10 @@ function! rcfunc#bufCount()
         let i-=1
     endwhile
     return j
+endfunction
+        
+
+function! rcfunc#TagbarStatusFunc(current, sort, fname, ...) abort
+    let colour = a:current ? '%#StatusLine#' : '%#StatusLineNC#'
+    return colour . "+=TAGS=+" . a:fname . '%= [' . a:sort . '] ' 
 endfunction
