@@ -68,15 +68,19 @@ set statusline=%<\ %F\ %h%r%{SyntasticStatuslineFlag()}%m%=%-14.(%l,%c%V%)\ %P
 "+++Syntastic settings
 let g:syntastic_stl_format = '[%E{%e Err}%B{ : }%W{%w Warn}]'
 let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_loc_list_height = 3
+"let g:syntastic_loc_list_height = 3
 "switch to 2 if don't want the errors window popping up automatically
+let g:syntastic_python_checkers = ["pylint"]
 let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 1
+let g:syntastic_loc_list_height=2
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
 let g:syntastic_error_symbol = '>>'
 let g:syntastic_warning_symbol = '>'
 let g:syntastic_style_error_symbol = '**'
 let g:syntastic_style_warning_symbol = '*'
+let g:syntastic_python_pylint_args = '--extension-pkg-whitelist=numpy --include-naming-hint=y'
+let g:syntastic_python_python_exec = '/usr/bin/python3'
 "screw mouse support
 let g:syntastic_enable_balloons = 0
 "disable highlighting due to it sometimes not identifying
@@ -84,7 +88,7 @@ let g:syntastic_enable_balloons = 0
 "Since there is still the error sidebar this is ok
 let g:syntastic_enable_highlighting = 0
 let g:syntastic_mode_map = {
-  \ "mode": "active",
+  \ "mode": "passive",
   \ "active_filetypes": [],
   \ "passive_filetypes": [] }
 let g:syntastic_shell = "/bin/bash"
