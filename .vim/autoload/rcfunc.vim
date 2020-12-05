@@ -1,58 +1,43 @@
-"Refreshes the buffer"
-function! rcfunc#refresh ()
-  nohl  
-  IndentGuidesEnable
+" function that will set up indents to arbitrary widths without tabstop
+function SetIndentLevel(width)
+  let &expandtab=1
+  let &shiftwidth=a:width
+  let &softtabstop=a:width
+  let &tabstop=a:width
 endfunction
 
-"Deals with makefiles
-function! rcfunc#Setup_Makefiles ()
-  setfiletype make
-  set noexpandtab "use real tabs since makefile is stupid
-endfunction
+" make the tab key perform autocompletion (see :help compl-whole-line)
+function! CleverTab()
+  if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+    " insert a tab if at the beginning of a line (or it only has whitespace)
+    return "\<Tab>"
+  else
+    " autocomplete otherwise
+    return "\<C-N>"
+  endif 
+endfunction 
 
 "Sets tag variables and opens up windows
-function! rcfunc#Setup_tags ()
-  "if it has a tags file
-  if strlen(findfile('.tags',"."))
-      "for every directory above that has a .git folder
-      for rootDirs in finddir(".git",".;~solfest/workspace",-1)
-        "add that directory to tags
-        let &tags .= rootDirs[0:-5] . ","
-      endfor
-  endif
-endfunction
+function! rcfunc#FindTags ()
+  " create a list of the current tags
+  let my_tags = split(&tags, ",")
 
-"Closes NERDTree and tagbar if they are all that's open
-function! rcfunc#killIDE ()
-    "Detects which are open
-    if exists('t:NERDTreeBufName')
-        let nerdtree_open = bufwinnr(t:NERDTreeBufName) != -1
-    else
-        let nerdtree_open = 0
-    endif
-    let tagbar_open = bufwinnr('__Tagbar__') != -1
+  " find all tag files for the repo (assuming the name is .tags)
+  for tag_file in findfile(.tags", ".;/home/$USER;.git;-1)
+    " add absolute path of tags files to the tag list (see fnamemodify, filename-modifiers)
+    let my_tags += [fnamemodify(tag_file, ":p")]
+  endfor
 
-    "if the number of windows is less than tagbar and nerdtree (2)
-    if winnr('$') <= tagbar_open + nerdtree_open
-        quit
-    endif
-endfunction
+  " sort the tags and remove duplicate entries
+  " TODO: figure out if there's a way to to this without messing up the order
+  call uniq(sort(my_tags))
 
-"This gets the buffer count
-function! rcfunc#bufCount()
-    "The last buffer
-    let i = bufnr('$')
-    let j = 0
-    while i >= 1
-        "if
-        if buflisted(i)
-            let j+=1
-        endif
-        let i-=1
-    endwhile
-    return j
-endfunction
-        
+  " repopulate the tag list
+  let &tags = ""
+  for tag_file in my_tags
+    let &tags .= tag_file . ","
+  endfor
+endfunction        
 
 function! rcfunc#TagbarStatusFunc(current, sort, fname, ...) abort
     let colour = a:current ? '%#StatusLine#' : '%#StatusLineNC#'

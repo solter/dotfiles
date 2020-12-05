@@ -1,154 +1,144 @@
-"++++++++general parameter settings+++++++++
-"Grab plugins
-execute pathogen#infect()
+" if using vim without the packages feature, have pathogen
+" pull in plugins
+if !has("packages")
+  call pathogen#infect("~/.vim/pack/standard/start/{})
+endif
 
-"tab spacing
-set expandtab
-set shiftwidth=4
-set softtabstop=4
-set tabstop=4
+augroup display_settings
+  " clean out the previous indent_guide_settings
+  autocmd!
 
-"turn on line numbers 
-set number
+  "turn on line numbers 
+  set number
 
-"set color scheme to use
-colorscheme peachpuff_custom
+  "set color scheme to use
+  colorscheme default
 
-"turn on syntax highlighting
-syntax enable
+  "turn on syntax highlighting
+  syntax enable
 
-"preserve tabbing from 1 line to the next
-set autoindent
+  " highlight all matches when searching
+  set hlsearch
 
-"auto indent based upon syntax
-filetype on
-filetype plugin indent on
-filetype plugin on
+  "status line
+  set statusline=%<\ %F\ %h%r%m%=%-14.(%l,%c%V%)\ %P
+  " always show the status line
+  set laststatus=2
 
-"open split windows below and to the right rather than above and left
-set splitbelow
-set splitright
+  "open split windows below and to the right rather than above and left
+  set splitbelow
+  set splitright
 
-"set window resizing tools
+  "turn on search highlighting - and reset the highlight to null when window refreshed
+  set hlsearch
+augroup END
+
+" reset highlighting
+nnoremap <silent> <C-I> :nohl<CR>:syntax sync fromstart<CR>:IndentGuidesToggle<CR>:IndentGuidesToggle
+
+" make the tab key perform autocompletion (see :help compl-whole-line)
+inoremap <Tab> <C-R>=rcfunc#CleverTab()<CR>
+
+" set window resizing tools
 nnoremap <C-j> :resize +3<CR>
 nnoremap <C-k> :resize -3<CR>
 nnoremap <C-h> :vertical resize -3<CR>
 nnoremap <C-l> :vertical resize +3<CR>
 
-"always have a status line
-set laststatus=2
+augroup fold_and_indent
+  " clean out the previous indent_guide_settings
+  autocmd!
 
-"map window-d (<C-w><C-d>) to open up file explorer
-nmap <silent> <C-W><C-D> :vertical topleft 25split .<CR>
+  "preserve tabbing from 1 line to the next
+  set autoindent
 
-"enable pathogen to dig up mods in .vim/bundle
-execute pathogen#infect()
+  "auto indent based upon syntax
+  filetype plugin indent on
 
-"+++++++++specific parameters for different types of files
-"Make fortran free form, not fixed
-let fortran_free_source = 1
+  " make folds happen based on language syntax
+  set foldmethod=syntax
 
-"force vim to use bash shell, not other stuff
-let g:is_bash = 1
+  " show the current fold state on the left
+  set foldcolumn=0
+augroup END
+" set it up so the indent level is 2 by default
+call rcfunc#SetIndentLevel(2)
 
-"define filetypes
-augroup filetypedetect
-  au! BufNewFile,BufRead *.f90? setfiletype fortran
-  au! BufNewFile,BufRead *.pyf setfiletype fortran
-  au! BufNewFile,BufRead Make* :call rcfunc#Setup_Makefiles()
-  au! BufNewFile,BufRead .bash* setfiletype sh
-  au! BufNewFile,BufRead *.vim setfiletype vim
-  au! BufNewFile,BufRead *.py setfiletype python
-  au! BufNewFile,BufRead *.json setfiletype json
+augroup filetype_settings
+    " clean out the previous indent_guide_settings
+  autocmd!
+
+  " force it to use bash for shell
+  let g:is_bash=1
+  " make sure json doesn't conceal characters
+  let g:vim_json_syntax_conceal = 0
+
+  autocmd BufNewFile,BufRead *.f* setfiletype fortran
+  autocmd BufNewFile,BufRead .?bash* setfiletype sh
+  autocmd BufNewFile,BufRead [Mm]ake* setfiletype make
+  autocmd BufNewFile,BufRead *.vim setfiletype make
+  autocmd BufNewFile,BufRead *.py setfiletype python
+
+  # set up auto-formatters
+  autocmd FileType xml setlocal equalprg=xmllint\ --format\ -
 augroup END
 
-"status line
-set statusline=%<\ %F\ %h%r%{SyntasticStatuslineFlag()}%m%=%-14.(%l,%c%V%)\ %P
+" every time the file buffer is entered, rescan for tags
+autocmd BufEnter * :call rcfunc#FindTags()
 
-"+++Syntastic settings
-let g:syntastic_stl_format = '[%E{%e Err}%B{ : }%W{%w Warn}]'
-let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_loc_list_height = 3
-"switch to 2 if don't want the errors window popping up automatically
-let g:syntastic_python_checkers = ["pylint"]
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_loc_list_height=2
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-let g:syntastic_error_symbol = '>>'
-let g:syntastic_warning_symbol = '>'
-let g:syntastic_style_error_symbol = '**'
-let g:syntastic_style_warning_symbol = '*'
-let g:syntastic_python_pylint_args = '--extension-pkg-whitelist=numpy --include-naming-hint=y'
-let g:syntastic_python_python_exec = '/usr/bin/python3'
-"screw mouse support
-let g:syntastic_enable_balloons = 0
-"disable highlighting due to it sometimes not identifying
-"where in the line, so just highlights the beginning of the line.
-"Since there is still the error sidebar this is ok
-let g:syntastic_enable_highlighting = 0
-let g:syntastic_mode_map = {
-  \ "mode": "passive",
-  \ "active_filetypes": [],
-  \ "passive_filetypes": [] }
-let g:syntastic_shell = "/bin/bash"
+" ++ plugin settings ++
 
-"+++NERDTree settings
-let g:NERDTreeShowBookmarks = 1
-let g:NERDTreeDirArrows=0
+augroup indent_guide_settings
+  " clean out the previous indent_guide_settings
+  autocmd!
 
-"+++Tagbar settings
-nnoremap ,t TagbarTogglePause
-let g:tagbar_width = 30
-let g:tagbar_sort = 0
-let g:tagbar_iconchars = ['+', '-']
-let g:tagbar_autoshowtag = 1
-autocmd FileType * nested :call tagbar#autoopen(0)
-let g:tagbar_status_func = 'rcfunc#TagbarStatusFunc'
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-
-"Opens up NERDTree and tagbar if tags exist
-let &tags="./.tags,"
-"add root directory containing arch tags if it exists
-au VimEnter *.* :call rcfunc#Setup_tags()
-
-"When a new window is entered
-autocmd BufEnter __Tagbar__  :call rcfunc#killIDE()
-autocmd BufEnter NERD_tree*  :call rcfunc#killIDE()
-
-"ycm settings
-nnoremap <C-0> :YcmCompleter GoToImprecise<CR>
-nnoremap <leader>yc :YcmCompleter<CR>
-nnoremap <C-0> :YcmCompleter GetDoc<CR>
-let g:ycm_show_diagnostics_ui = 0
-let g:ycm_collect_identifiers_from_tags_files = 1
-let g:ycm_seed_identifiers_with_syntax = 1
-let g:ycm_goto_buffer_command = 'horizontal-split'
-
-"settings for the preview eindow
-let g:completeopt = 'menuone,menu,preview'
-let g:ycm_add_preview_to_completeopt = 1
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_autoclose_preview_window_after_insertion = 1
-
-augroup indent_settings
-  "auto-folds with indents
-  au BufReadPre * setlocal foldmethod=indent
-  "save folds when closing
-  au BufWinLeave *.* mkview
-  au BufWinEnter *.* silent loadview
-  "set up indent guides
-  let g:indent_guides_auto_colors=0
-  autocmd VimEnter,Colorscheme * hi IndentGuidesEven ctermbg=5
-  let g:indent_guides_start_level=2
+  # use a single character rather than the full space 
   let g:indent_guides_guide_size=1
+
+  # make the colors more reasonable
+  let g:indent_guides_auto_colors=0
+  autocmd VimEnter,Colorscheme * :highlight IndentGuidesOdd  cmtermbg=none 
+  autocmd VimEnter,Colorscheme * :highlight IndentGuidesEven cmtermbg=Cyan 
+
+  " start using indent guides on startup 
   let g:indent_guides_enable_on_vim_startup=1
-  let g:indent_guides_default_mapping = 0
 augroup END
 
-"turn on search highlighting - and reset the highlight to null when window refreshed
-set hlsearch
-nnoremap <silent> <C-I> :nohl <CR> :IndentGuidesEnable <CR>
-nnoremap <C-S> :syntax sync fromstart <CR>
+augroup tagbar_settings
+  " clean out the previous indent_guide_settings
+  autocmd!
 
+  " make the window smaller
+  let g:tagbar_width = 30
+  " make tags same order as in file
+  let g:tagbar_sort = 0
+  " use +/- instead of fancy arrows in tagbar
+  let g:tagbar_iconchars = ['+', '-']
+  " highlight the current tag in the file
+  let g:tagbar_autoshowtag = 1
+
+  " if not doing vimdiff, open TagBar automatically
+  if !&diff
+    autocmd FileType * nested :call tagbar#autoopen(0)
+  endif
+
+  let g:tagbar_status_func = 'rcfunc#TagbarStatusFunc'
+augroup END
+" shortcut to freeze the tagbar
+nnoremap ,t TagbarTogglePause
+
+augroup dir_tree_settings
+    " clean out the previous indent_guide_settings
+  autocmd!
+
+  if exists("g:loaded_nerd_tree") && g:loaded_nerd_tree
+    " if using NERDTree, use +/- instead of fancy arrows
+    let g:NERDTreeDirArrowExapndable="+"
+    let g:NERDTreeDirArrowCollapsible="-"
+  else
+    " change the default style to long
+    let g:netrw_liststyle=1
+    " make the hidden files anything that starts with a .
+    let g:netrw_list_hide='\(^\|\s\s\)\zs\.\S\+'
+  endif
+augroup END
