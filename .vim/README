@@ -1,0 +1,13 @@
+The plugins should be installed (cloned) into
+pack/standard/start (see :help package - dumping plugins into a "standard" namespace)
+
+In older versions of vim, pathogen is used instead of the packages plugin.
+
+Here are the "standard" plugins that peter users:
+Plugin                  |    git repo
+=========================================
+      Tagbar            | https://github.com/majutsushi/tagbar.git
+   Vim-Indent-Guides    | https://github.com/nathanaelkane/vim-indent-guides.git
+
+After "installation", don't forget to run
+:helptags ALL

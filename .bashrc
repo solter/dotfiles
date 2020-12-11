@@ -64,7 +64,7 @@ fi
 #will not affect any directories within 3 of root
 DIR3='$(pwd | sed -e '"'"'s|/[^/]*/\([^/]*/\)*\(\([^/]*/\)\{2\}.*\)|\2|'"'"')'
 if [ "$color_prompt" = yes ]; then
-    PS1="\u@\h\[\e[01;36m\] : $DIR3 \$\[\e[00m\] "
+    PS1="${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\] : \[\033[01;34m\]$DIR3\[\033[00m\]\$ "
 else
     PS1="\u@\h: $DIR3 \$ "
     if [ $(uname) == "Darwin" ]; then

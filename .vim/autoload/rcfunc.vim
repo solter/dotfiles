@@ -1,5 +1,5 @@
 " function that will set up indents to arbitrary widths without tabstop
-function SetIndentLevel(width)
+function rcfunc#SetIndentLevel(width)
   let &expandtab=1
   let &shiftwidth=a:width
   let &softtabstop=a:width
@@ -23,9 +23,9 @@ function! rcfunc#FindTags ()
   let my_tags = split(&tags, ",")
 
   " find all tag files for the repo (assuming the name is .tags)
-  for tag_file in findfile(.tags", ".;/home/$USER;.git;-1)
+  for tag_file in findfile(".tags", ".;/home/$USER;.git;", -1)
     " add absolute path of tags files to the tag list (see fnamemodify, filename-modifiers)
-    let my_tags += [fnamemodify(tag_file, ":p")]
+    add(my_tags, fnamemodify(tag_file, ":p"))
   endfor
 
   " sort the tags and remove duplicate entries

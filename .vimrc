@@ -79,7 +79,7 @@ augroup filetype_settings
   autocmd BufNewFile,BufRead *.vim setfiletype make
   autocmd BufNewFile,BufRead *.py setfiletype python
 
-  # set up auto-formatters
+  " set up auto-formatters
   autocmd FileType xml setlocal equalprg=xmllint\ --format\ -
 augroup END
 
@@ -92,13 +92,13 @@ augroup indent_guide_settings
   " clean out the previous indent_guide_settings
   autocmd!
 
-  # use a single character rather than the full space 
+  " use a single character rather than the full space 
   let g:indent_guides_guide_size=1
 
-  # make the colors more reasonable
+  " make the colors more reasonable
   let g:indent_guides_auto_colors=0
-  autocmd VimEnter,Colorscheme * :highlight IndentGuidesOdd  cmtermbg=none 
-  autocmd VimEnter,Colorscheme * :highlight IndentGuidesEven cmtermbg=Cyan 
+  autocmd VimEnter,Colorscheme * :highlight IndentGuidesOdd  ctermbg=none 
+  autocmd VimEnter,Colorscheme * :highlight IndentGuidesEven ctermbg=Cyan 
 
   " start using indent guides on startup 
   let g:indent_guides_enable_on_vim_startup=1
