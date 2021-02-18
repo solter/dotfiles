@@ -7,7 +7,7 @@ function rcfunc#SetIndentLevel(width)
 endfunction
 
 " make the tab key perform autocompletion (see :help compl-whole-line)
-function! CleverTab()
+function! rcfunc#CleverTab()
   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
     " insert a tab if at the beginning of a line (or it only has whitespace)
     return "\<Tab>"

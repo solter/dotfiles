@@ -4,6 +4,9 @@ if !has("packages")
   call pathogen#infect("~/.vim/pack/standard/start/{})
 endif
 
+" disable the audible bell
+set visualbell t_vb=
+
 augroup display_settings
   " clean out the previous indent_guide_settings
   autocmd!
