@@ -1,2 +1,5 @@
 .vim/pack
 .vim/.netrwhist
+*.swp
+*.o
+*.nfs
